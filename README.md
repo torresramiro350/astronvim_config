@@ -1,1 +1,1 @@
-# Config for use with Astronvim
+## Config for use with Astronvim
