@@ -33,8 +33,8 @@ local config = {
   -- Set colorscheme
   -- colorscheme = "default_theme",
   -- colorscheme = "kanagawa",
-  -- colorscheme = "tokyodark",
-  colorscheme = "catppuccin",
+  colorscheme = "tokyodark",
+  -- colorscheme = "catppuccin",
 
   -- Override highlight groups in any theme
   highlights = {

@@ -113,22 +113,22 @@ return {
       map("n", "<leader><F6>", ":CMake configure<CR>", opts)
       map("n", "<leader><F7>", ":CMake build_all<CR>", opts)
       local Path = require "plenary.path"
-      -- local progress = ""
-      -- config = function()
-      -- local job = require("cmake").build()
-      -- if job then
-      --   job:after(vim.schedule_wrap(function(_, exit_code)
-      --     if exit_code == 0 then
-      --       vim.notify("Target was built successfully", vim.log.levels.INFO, { title = "CMake" })
-      --     else
-      --       vim.notify("Target build failed", vim.log.levels.ERROR, { title = "CMake" })
-      --     end
-      --   end))
-      -- end
+      local progress = ""
+      -- function cmake_build()
+      --   local job = require("cmake").build()
+      --   if job then
+      --     job:after(vim.schedule_wrap(function(_, exit_code)
+      --       if exit_code == 0 then
+      --         vim.notify("Target was built successfully", vim.log.levels.INFO, { title = "CMake" })
+      --       else
+      --         vim.notify("Target build failed", vim.log.levels.ERROR, { title = "CMake" })
+      --       end
+      --     end))
+      --   end
       -- end
 
       require("cmake").setup {
-        cmake_executable = "/usr/bin/cmake",
+        cmake_executable = "cmake",
         save_before_build = true,
         parameters_file = "neovim.json",
         copy_compile_commands = true,
@@ -140,12 +140,10 @@ return {
         },
         dap_open_command = require("dap").repl.open,
         build_dir = tostring(Path:new("{cwd}", "build", "{os}-{build_type}")),
-        -- default_projects_path = tostring(Path:new(vim.loop.os_homedir(), "Projects")),
-        default_projects_path = tostring(Path:new("{cwd}", "Projects")),
+        default_projects_path = tostring(Path:new(vim.loop.os_homedir(), "Projects")),
         configure_args = { "-GNinja", "-D", "CMAKE_EXPORT_COMPILE_COMMANDS=1" },
         build_args = {},
         on_build_output = nil,
-        -- TODO: how to place build status on feline
         -- on_build_output = function(lines)
         --   local match = string.match(lines[#lines], "(%[.*%])")
         --   if match then progress = string.gsub(match, "%%", "%%%%") end
