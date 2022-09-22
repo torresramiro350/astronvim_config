@@ -4,6 +4,7 @@ return {
     "nvim-treesitter/nvim-treesitter-context",
     config = function() require("treesitter-context").setup {} end,
   },
+  { "simrat39/inlay-hints.nvim" },
   {
     "kylechui/nvim-surround",
     config = function()
@@ -94,8 +95,30 @@ return {
       }
     end,
   },
+  --sonokai
+  { "sainnhe/sonokai" },
+  --material
+  {
+    "marko-cerovac/material.nvim",
+    config = function()
+      require("material").setup {
+        italics = {
+          keywords = true,
+          comments = true,
+          functions = false,
+          variables = false,
+        },
+      }
+    end,
+  },
   -- kanagawa bones colorscheme
+  { "Shatur/neovim-ayu", config = function()
+    require("ayu").setup {
+      mirage = false,
+    }
+  end },
   { "rebelot/kanagawa.nvim" },
+  { "lunarvim/horizon.nvim" },
   -- tokyodark color scheme
   { "tiagovla/tokyodark.nvim" },
   -- catppuccin color scheme

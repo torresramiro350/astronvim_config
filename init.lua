@@ -32,8 +32,12 @@ local config = {
 
   -- Set colorscheme
   -- colorscheme = "default_theme",
+  -- colorscheme = "sonokai",
   -- colorscheme = "kanagawa",
   colorscheme = "tokyodark",
+  -- colorscheme = "ayu",
+  -- colorscheme = "material",
+  -- colorscheme = "horizon",
   -- colorscheme = "catppuccin",
 
   -- Override highlight groups in any theme
@@ -56,8 +60,11 @@ local config = {
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
-      catppuccin_flavour = "mocha", -- latte, frappe, macchiato, mocha
-      -- catppuccin_flavour = "latte", -- latte, frappe, macchiato, mocha
+      tokyodark_enable_italic_comment = false,
+      -- catppuccin_flavour = "mocha", -- latte, frappe, macchiato, mocha
+      -- material_style = "deep ocean",
+      -- sonokai_style = "atlantis",
+      -- sonokai_style = "andromeda",
     },
   },
 
@@ -130,7 +137,8 @@ local config = {
         },
         null_ls.builtins.formatting.isort,
         --[[ null_ls.builtins.diagnostics.flake8, ]]
-        null_ls.builtins.diagnostics.pylint,
+        -- null_ls.builtins.diagnostics.pylint,
+        null_ls.builtins.diagnostics.flake8,
         -- C++
         null_ls.builtins.diagnostics.cppcheck,
         -- CMake
@@ -236,6 +244,13 @@ local config = {
       --     },
       --   },
       -- },
+      sourcery = {
+        init_options = {
+          token = "user_dIGOG_nGdW97HxBFt5JzlXervkgAPuQqWm8_wJBBSpHEbiXhDywUnopZTvs",
+          -- extension = "vim.lsp",
+          -- editor_version = "nvim",
+        },
+      },
       clangd = {
         capabilities = {
           offsetEncoding = "utf-8",
