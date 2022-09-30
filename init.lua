@@ -57,10 +57,13 @@ local config = {
   options = {
     opt = {
       relativenumber = true, -- sets vim.opt.relativenumber
+      -- guifont = { "FantasqueSansMono Nerd Font", ":h11" },
+      guifont = { "VictorMono_Nerd_Font", ":h10" },
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
       tokyodark_enable_italic_comment = false,
+      neovide_cursor_vfx_mode = "railgun",
       -- catppuccin_flavour = "mocha", -- latte, frappe, macchiato, mocha
       -- material_style = "deep ocean",
       -- sonokai_style = "atlantis",
@@ -136,9 +139,10 @@ local config = {
           extra_args = { "--fast" },
         },
         null_ls.builtins.formatting.isort,
-        --[[ null_ls.builtins.diagnostics.flake8, ]]
-        -- null_ls.builtins.diagnostics.pylint,
         null_ls.builtins.diagnostics.flake8,
+        null_ls.builtins.diagnostics.mypy,
+        null_ls.builtins.diagnostics.vulture,
+        -- null_ls.builtins.diagnostics.pylint,
         -- C++
         null_ls.builtins.diagnostics.cppcheck,
         -- CMake
