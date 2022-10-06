@@ -34,11 +34,19 @@ local config = {
   -- colorscheme = "default_theme",
   -- colorscheme = "sonokai",
   -- colorscheme = "kanagawa",
-  colorscheme = "tokyodark",
-  -- colorscheme = "ayu",
+  -- colorscheme = "tokyodark",
+  -- colorscheme = "minimal",
+  colorscheme = "ayu",
   -- colorscheme = "material",
+  -- colorscheme = "onedark",
   -- colorscheme = "horizon",
   -- colorscheme = "catppuccin",
+  -- themer
+  -- colorscheme = "themer_ayu_mirage",
+  -- colorscheme = "themer_ayu_dark",
+  -- colorscheme = "themer_tokyonight",
+  -- colorscheme = "themer_everforest",
+  -- colorscheme = "themer_tokyodark",
 
   -- Override highlight groups in any theme
   highlights = {
@@ -57,15 +65,21 @@ local config = {
   options = {
     opt = {
       relativenumber = true, -- sets vim.opt.relativenumber
+      -- guifont = { "FiraCode Nerd Font", ":h10" },
       -- guifont = { "FantasqueSansMono Nerd Font", ":h11" },
-      guifont = { "VictorMono_Nerd_Font", ":h10" },
+      -- guifont = { "Victor Mono", ":h10" },
+      guifont = { "VictorMono Nerd Font", ":h10" },
+      -- guifont = { "Lilex_Nerd_Font", ":h10" },
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
       tokyodark_enable_italic_comment = false,
+      -- tokyodark_color_gamma = 1.50,
       neovide_cursor_vfx_mode = "railgun",
+      -- minimal_italic_functions = 1,
+      -- minimal_italic_keywords = 1,
       -- catppuccin_flavour = "mocha", -- latte, frappe, macchiato, mocha
-      -- material_style = "deep ocean",
+      -- material_style = "palenight",
       -- sonokai_style = "atlantis",
       -- sonokai_style = "andromeda",
     },

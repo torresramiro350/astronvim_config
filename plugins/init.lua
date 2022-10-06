@@ -1,5 +1,11 @@
 -- keeping plugins here
 return {
+  { "andweeb/presence.nvim" },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "BufRead",
+    config = function() require("lsp_signature").setup() end,
+  },
   {
     "nvim-treesitter/nvim-treesitter-context",
     config = function() require("treesitter-context").setup {} end,
@@ -95,6 +101,53 @@ return {
       }
     end,
   },
+  --themer
+  {
+    "themercorp/themer.lua",
+    config = function()
+      require("themer").setup {
+        -- colorscheme = "rose_pine",
+        -- colorscheme = "kurai",
+        -- colorscheme = "papa_dark",
+        -- colorscheme = "ayu_mirage",
+        styles = {
+          ["function"] = { style = "italic" },
+          functionbuiltin = { style = "italic" },
+          -- variable = { style = "italic" },
+          variable = { style = "None" },
+          variableBuiltIn = { style = "italic" },
+          parameter = { style = "italic" },
+        },
+        plugins = {
+          treesitter = true,
+          indentline = true,
+          barbar = true,
+          bufferline = true,
+          cmp = true,
+          gitsigns = true,
+          lsp = true,
+          telescope = true,
+        },
+      }
+    end,
+  },
+  -- onedark
+  {
+    "navarasu/onedark.nvim",
+    config = function()
+      require("onedark").setup {
+        style = "deep",
+        -- style = "darker",
+        code_style = {
+          comments = "none",
+          keywords = "italic",
+          functions = "italic",
+        },
+      }
+    end,
+  },
+  --minimal
+  { "Yazeed1s/minimal.nvim" },
   --sonokai
   { "sainnhe/sonokai" },
   --material
@@ -105,7 +158,7 @@ return {
         italics = {
           keywords = true,
           comments = true,
-          functions = false,
+          functions = true,
           variables = false,
         },
       }
@@ -114,7 +167,7 @@ return {
   -- kanagawa bones colorscheme
   { "Shatur/neovim-ayu", config = function()
     require("ayu").setup {
-      mirage = false,
+      mirage = true,
     }
   end },
   { "rebelot/kanagawa.nvim" },
