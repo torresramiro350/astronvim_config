@@ -23,6 +23,8 @@ local config = {
     pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
     skip_prompts = false, -- skip prompts about breaking changes
     show_changelog = true, -- show the changelog after performing an update
+    auto_reload = false, -- automatically reload and sync packer after a successful update
+    auto_quit = false, -- automatically quit the current session after a successful update
     -- remotes = { -- easily add new remotes to track
     --   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
     --   ["remote2"] = "github_user/repo", -- GitHub user/repo shortcut,
@@ -65,14 +67,18 @@ local config = {
   options = {
     opt = {
       relativenumber = true, -- sets vim.opt.relativenumber
-      -- guifont = { "FiraCode Nerd Font", ":h10" },
-      -- guifont = { "FantasqueSansMono Nerd Font", ":h11" },
-      -- guifont = { "Victor Mono", ":h10" },
+      number = true, -- sets vim.opt.number
+      spell = true, -- sets vim.opt.spell
+      signcolumn = "auto", -- sets vim.opt.signcolumn to auto
+      wrap = false, -- sets vim.opt.wrap
       guifont = { "VictorMono Nerd Font", ":h10" },
-      -- guifont = { "Lilex_Nerd_Font", ":h10" },
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
+      cmp_enabled = true, -- enable completion at start
+      autopairs_enabled = true, -- enable autopairs at start
+      diagnostics_enabled = true, -- enable diagnostics at start
+      status_diagnostics_enabled = true, -- enable diagnostics in statusline
       tokyodark_enable_italic_comment = false,
       -- tokyodark_color_gamma = 1.50,
       neovide_cursor_vfx_mode = "railgun",
@@ -92,6 +98,19 @@ local config = {
     colors = {
       fg = "#abb2bf",
     },
+    highlights = function(hl) -- or a function that returns a new table of colors to set
+      local C = require "default_theme.colors"
+
+      hl.Normal = { fg = C.fg, bg = C.bg }
+
+      -- New approach instead of diagnostic_style
+      hl.DiagnosticError.italic = true
+      hl.DiagnosticHint.italic = true
+      hl.DiagnosticInfo.italic = true
+      hl.DiagnosticWarn.italic = true
+
+      return hl
+    end,
     plugins = { -- enable or disable extra plugin highlighting
       aerial = true,
       beacon = false,
@@ -114,10 +133,10 @@ local config = {
   },
 
   -- Disable AstroNvim ui features
-  ui = {
-    nui_input = true,
-    telescope_select = true,
-  },
+  -- ui = {
+  --   nui_input = true,
+  --   telescope_select = true,
+  -- },
 
   -- Configure plugins
   plugins = {
@@ -167,21 +186,21 @@ local config = {
         -- null_ls.builtins.formatting.dprint,
       }
       -- set up null-ls's on_attach function
-      local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-      config.on_attach = function(client, bufnr)
-        -- NOTE: You can remove this on attach function to disable format on save
-        if client.resolved_capabilities.document_formatting then
-          vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            desc = "Auto format before save",
-            -- pattern = "<buffer>",
-            group = augroup,
-            buffer = bufnr,
-            callback = function() vim.lsp.buf.formatting_sync(nil, 5000) end,
-            -- callback = vim.lsp.buf.formatting_sync(nil, 2000),
-          })
-        end
-      end
+      -- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+      -- config.on_attach = function(client, bufnr)
+      --   -- NOTE: You can remove this on attach function to disable format on save
+      --   if client.client_capabilities.document_formatting then
+      --     vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+      --     vim.api.nvim_create_autocmd("BufWritePre", {
+      --       desc = "Auto format before save",
+      --       -- pattern = "<buffer>",
+      --       group = augroup,
+      --       buffer = bufnr,
+      --       callback = function() vim.lsp.buf.formatting_sync(nil, 5000) end,
+      --       -- callback = vim.lsp.buf.formatting_sync(nil, 2000),
+      --     })
+      --   end
+      -- end
       return config -- return final config table
     end,
     treesitter = {
@@ -189,11 +208,13 @@ local config = {
     },
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = {
-      ensure_installed = { "sumneko_lua", "clangd", "rust_analyzer" },
+      -- ensure_installed = { "sumneko_lua", "clangd", "rust_analyzer" },
+      ensure_installed = { "clangd", "rust_analyzer" },
     },
     -- use mason-tool-installer to configure DAP/Formatters/Linter installation
     ["mason-tool-installer"] = {
-      ensure_installed = { "prettier", "stylua" },
+      ensure_installed = { "prettier" },
+      -- ensure_installed = { "prettier", "stylua" },
     },
     packer = {
       compile_path = vim.fn.stdpath "data" .. "/packer_compiled.lua",
@@ -206,7 +227,7 @@ local config = {
     vscode_snippet_paths = {},
     -- Extend filetypes
     filetype_extend = {
-      javascript = { "javascriptreact" },
+      -- javascript = { "javascriptreact" },
     },
   },
 
@@ -227,6 +248,18 @@ local config = {
 
   -- Extend LSP configuration
   lsp = {
+    formatting = {
+      timeout_ms = 3200,
+      disabled = {
+        -- "sumneko_lua"
+      },
+      -- filter = function(client)
+      --   if vim.bo.filetype == "javascript" then return client.name == "null-ls" end
+      --   --enable all other clients
+      --   return true
+      -- end,
+    },
+
     skip_setup = { "clangd", "rust_analyzer", "cmake-language-server" },
     -- enable servers that you already have installed without mason
     servers = {
@@ -331,6 +364,7 @@ local config = {
       vim.cmd(cmd)
       if require("core.utils").is_available "alpha-nvim" and not bufs[2] then require("alpha").start(true) end
     end
+
     vim.keymap.del("n", "<leader>c")
     if require("core.utils").is_available "bufdelete.nvim" then
       vim.keymap.set("n", "<leader>c", function() alpha_on_bye "Bdelete!" end, { desc = "Close buffer" })
