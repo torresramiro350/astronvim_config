@@ -101,6 +101,18 @@ return {
       }
     end,
   },
+  {
+    "folke/tokyonight.nvim",
+    config = function()
+      require("tokyonight").setup {
+        styles = {
+          comments = { italic = false },
+          keywords = { italic = true },
+          functions = { italic = true },
+        },
+      }
+    end,
+  },
   --themer
   {
     "themercorp/themer.lua",
@@ -136,7 +148,8 @@ return {
     "navarasu/onedark.nvim",
     config = function()
       require("onedark").setup {
-        style = "deep",
+        style = "cool",
+        -- style = "deep",
         -- style = "darker",
         code_style = {
           comments = "none",
@@ -165,11 +178,14 @@ return {
     end,
   },
   -- kanagawa bones colorscheme
-  { "Shatur/neovim-ayu", config = function()
-    require("ayu").setup {
-      mirage = true,
-    }
-  end },
+  {
+    "Shatur/neovim-ayu",
+    config = function()
+      require("ayu").setup {
+        mirage = true,
+      }
+    end,
+  },
   { "rebelot/kanagawa.nvim" },
   { "lunarvim/horizon.nvim" },
   -- tokyodark color scheme
