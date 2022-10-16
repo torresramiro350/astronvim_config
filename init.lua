@@ -1,18 +1,11 @@
+--              AstroNvim Configuration Table
+-- All configuration changes should go inside of the table below
+
+-- You can think of a Lua "table" as a dictionary like data structure the
+-- normal format is "key = value". These also handle array like data structures
+-- where a value with no key simply has an implicit numeric key
 local config = {
 
-  header = {
-    "   ⣴⣶⣤⡤⠦⣤⣀⣤⠆     ⣈⣭⣿⣶⣿⣦⣼⣆          ",
-    "    ⠉⠻⢿⣿⠿⣿⣿⣶⣦⠤⠄⡠⢾⣿⣿⡿⠋⠉⠉⠻⣿⣿⡛⣦       ",
-    "          ⠈⢿⣿⣟⠦ ⣾⣿⣿⣷    ⠻⠿⢿⣿⣧⣄     ",
-    "           ⣸⣿⣿⢧ ⢻⠻⣿⣿⣷⣄⣀⠄⠢⣀⡀⠈⠙⠿⠄    ",
-    "          ⢠⣿⣿⣿⠈    ⣻⣿⣿⣿⣿⣿⣿⣿⣛⣳⣤⣀⣀   ",
-    "   ⢠⣧⣶⣥⡤⢄ ⣸⣿⣿⠘  ⢀⣴⣿⣿⡿⠛⣿⣿⣧⠈⢿⠿⠟⠛⠻⠿⠄  ",
-    "  ⣰⣿⣿⠛⠻⣿⣿⡦⢹⣿⣷   ⢊⣿⣿⡏  ⢸⣿⣿⡇ ⢀⣠⣄⣾⠄   ",
-    " ⣠⣿⠿⠛ ⢀⣿⣿⣷⠘⢿⣿⣦⡀ ⢸⢿⣿⣿⣄ ⣸⣿⣿⡇⣪⣿⡿⠿⣿⣷⡄  ",
-    " ⠙⠃   ⣼⣿⡟  ⠈⠻⣿⣿⣦⣌⡇⠻⣿⣿⣷⣿⣿⣿ ⣿⣿⡇ ⠛⠻⢷⣄ ",
-    "      ⢻⣿⣿⣄   ⠈⠻⣿⣿⣿⣷⣿⣿⣿⣿⣿⡟ ⠫⢿⣿⡆     ",
-    "       ⠻⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⢀⣀⣤⣾⡿⠃     ",
-  },
   -- Configure AstroNvim updates
   updater = {
     remote = "origin", -- remote to use
@@ -32,48 +25,56 @@ local config = {
     -- },
   },
 
-  -- Set colorscheme
+  -- Set colorscheme to use
   -- colorscheme = "default_theme",
-  -- colorscheme = "sonokai",
-  -- colorscheme = "kanagawa",
-  -- colorscheme = "tokyodark",
-  -- colorscheme = "minimal",
   -- colorscheme = "ayu",
-  -- colorscheme = "tokyonight-moon",
-  -- colorscheme = "tokyonight-storm",
-  -- colorscheme = "material",
   colorscheme = "onedark",
-  -- colorscheme = "horizon",
-  -- colorscheme = "catppuccin",
-  -- themer
-  -- colorscheme = "themer_ayu_mirage",
-  -- colorscheme = "themer_ayu_dark",
-  -- colorscheme = "themer_tokyonight",
-  -- colorscheme = "themer_everforest",
-  -- colorscheme = "themer_tokyodark",
 
-  -- Override highlight groups in any theme
+  -- Add highlight groups in any theme
   highlights = {
-    -- duskfox = { -- a table of overrides
+    -- init = { -- this table overrides highlights in all themes
+    --   Normal = { bg = "#000000" },
+    -- }
+    -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
     -- },
-    default_theme = function(highlights) -- or a function that returns one
-      local C = require "default_theme.colors"
-
-      highlights.Normal = { fg = C.fg, bg = C.bg }
-      return highlights
-    end,
+    -- set highlights for all themes
+    -- use a function override to let us use lua to retrieve colors from highlight group
+    -- there is no default table so we don't need to put a parameter for this function
+    -- init = function()
+    --   -- get highlights from highlight groups
+    --   local normal = astronvim.get_hlgroup "Normal"
+    --   local fg, bg = normal.fg, normal.bg
+    --   local bg_alt = astronvim.get_hlgroup("Visual").bg
+    --   local green = astronvim.get_hlgroup("String").fg
+    --   local red = astronvim.get_hlgroup("Error").fg
+    --   -- return a table of highlights for telescope based on colors gotten from highlight groups
+    --   return {
+    --     TelescopeBorder = { fg = bg_alt, bg = bg },
+    --     TelescopeNormal = { bg = bg },
+    --     TelescopePreviewBorder = { fg = bg, bg = bg },
+    --     TelescopePreviewNormal = { bg = bg },
+    --     TelescopePreviewTitle = { fg = bg, bg = green },
+    --     TelescopePromptBorder = { fg = bg_alt, bg = bg_alt },
+    --     TelescopePromptNormal = { fg = fg, bg = bg_alt },
+    --     TelescopePromptPrefix = { fg = red, bg = bg_alt },
+    --     TelescopePromptTitle = { fg = bg, bg = red },
+    --     TelescopeResultsBorder = { fg = bg, bg = bg },
+    --     TelescopeResultsNormal = { bg = bg },
+    --     TelescopeResultsTitle = { fg = bg, bg = bg },
+    --   }
+    -- end,
   },
 
   -- set vim options here (vim.<first_key>.<second_key> =  value)
   options = {
     opt = {
+      -- set to true or false etc.
       relativenumber = true, -- sets vim.opt.relativenumber
       number = true, -- sets vim.opt.number
-      spell = true, -- sets vim.opt.spell
+      spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
-      guifont = { "VictorMono Nerd Font", ":h10" },
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -81,34 +82,40 @@ local config = {
       autopairs_enabled = true, -- enable autopairs at start
       diagnostics_enabled = true, -- enable diagnostics at start
       status_diagnostics_enabled = true, -- enable diagnostics in statusline
-      tokyodark_enable_italic_comment = false,
-      -- tokyodark_color_gamma = 1.50,
-      neovide_cursor_vfx_mode = "railgun",
-      -- minimal_italic_functions = 1,
-      -- minimal_italic_keywords = 1,
-      -- catppuccin_flavour = "mocha", -- latte, frappe, macchiato, mocha
-      -- material_style = "palenight",
-      -- sonokai_style = "atlantis",
-      -- sonokai_style = "andromeda",
     },
+  },
+  -- If you need more control, you can use the function()...end notation
+  -- options = function(local_vim)
+  --   local_vim.opt.relativenumber = true
+  --   local_vim.g.mapleader = " "
+  --   local_vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' } -- removing option from list
+  --   local_vim.opt.shortmess = vim.opt.shortmess + { I = true } -- add to option list
+  --
+  --   return local_vim
+  -- end,
+
+  -- Set dashboard header
+  header = {
+    " █████  ███████ ████████ ██████   ██████",
+    "██   ██ ██         ██    ██   ██ ██    ██",
+    "███████ ███████    ██    ██████  ██    ██",
+    "██   ██      ██    ██    ██   ██ ██    ██",
+    "██   ██ ███████    ██    ██   ██  ██████",
+    " ",
+    "    ███    ██ ██    ██ ██ ███    ███",
+    "    ████   ██ ██    ██ ██ ████  ████",
+    "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
+    "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
+    "    ██   ████   ████   ██ ██      ██",
   },
 
   -- Default theme configuration
   default_theme = {
-    diagnostics_style = { italic = true },
-    -- Modify the color table
-    -- colors = {
-    --   fg = "#abb2bf",
-    -- },
-    colors = function(C)
-      C.telescope_green = C.green
-      C.telescope_red = C.red
-      C.telescope_fg = C.fg
-      C.telescope_bg = C.black_1
-      C.telescope_bg_alt = C.bg_1
-      return C
-      -- end,
-    end,
+    -- Modify the color palette for the default theme
+    colors = {
+      fg = "#abb2bf",
+      bg = "#1e222a",
+    },
     highlights = function(hl) -- or a function that returns a new table of colors to set
       local C = require "default_theme.colors"
 
@@ -120,22 +127,10 @@ local config = {
       hl.DiagnosticInfo.italic = true
       hl.DiagnosticWarn.italic = true
 
-      hl.TelescopeBorder = { fg = C.telescope_bg_alt, bg = C.telescope_bg }
-      hl.TelescopeNormal = { bg = C.telescope_bg }
-      hl.TelescopePreviewBorder = { fg = C.telescope_bg, bg = C.telescope_bg }
-      hl.TelescopePreviewNormal = { bg = C.telescope_bg }
-      hl.TelescopePreviewTitle = { fg = C.telescope_bg, bg = C.telescope_green }
-      hl.TelescopePromptBorder = { fg = C.telescope_bg_alt, bg = C.telescope_bg_alt }
-      hl.TelescopePromptNormal = { fg = C.telescope_fg, bg = C.telescope_bg_alt }
-      hl.TelescopePromptPrefix = { fg = C.telescope_red, bg = C.telescope_bg_alt }
-      hl.TelescopePromptTitle = { fg = C.telescope_bg, bg = C.telescope_red }
-      hl.TelescopeResultsBorder = { fg = C.telescope_bg, bg = C.telescope_bg }
-      hl.TelescopeResultsNormal = { bg = C.telescope_bg }
-      hl.TelescopeResultsTitle = { fg = C.telescope_bg, bg = C.telescope_bg }
-
       return hl
     end,
-    plugins = { -- enable or disable extra plugin highlighting
+    -- enable or disable highlighting for extra plugins
+    plugins = {
       aerial = true,
       beacon = false,
       bufferline = true,
@@ -156,11 +151,87 @@ local config = {
     },
   },
 
-  -- Disable AstroNvim ui features
-  -- ui = {
-  --   nui_input = true,
-  --   telescope_select = true,
-  -- },
+  -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
+  diagnostics = {
+    virtual_text = true,
+    underline = true,
+  },
+
+  -- Extend LSP configuration
+  lsp = {
+    skip_setup = { "clangd", "rust_analyzer", "cmake-language-server" },
+    -- enable servers that you already have installed without mason
+    servers = {
+      -- "pyright"
+    },
+    formatting = {
+      format_on_save = true, -- enable or disable auto formatting on save
+      disabled = { -- disable formatting capabilities for the listed clients
+        -- "sumneko_lua",
+      },
+      -- filter = function(client) -- fully override the default formatting function
+      --   return true
+      -- end
+    },
+    -- easily add or disable built in mappings added during LSP attaching
+    mappings = {
+      n = {
+        -- ["<leader>lf"] = false -- disable formatting keymap
+      },
+    },
+    -- add to the global LSP on_attach function
+    -- on_attach = function(client, bufnr)
+    -- end,
+
+    -- override the mason server-registration function
+    -- server_registration = function(server, opts)
+    --   require("lspconfig")[server].setup(opts)
+    -- end,
+
+    -- Add overrides for LSP server settings, the keys are the name of the server
+    ["server-settings"] = {
+      -- example for addings schemas to yamlls
+      -- yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
+      --   settings = {
+      --     yaml = {
+      --       schemas = {
+      --         ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
+      --         ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+      --         ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+      --       },
+      --     },
+      --   },
+      -- },
+      clangd = {
+        capabilities = {
+          offsetEncoding = "utf-8",
+        },
+      },
+    },
+  },
+
+  -- Mapping data with "desc" stored directly by vim.keymap.set().
+  --
+  -- Please use this mappings table to set keyboard mapping since this is the
+  -- lower level configuration and more robust one. (which-key will
+  -- automatically pick-up stored data by this setting.)
+  mappings = {
+    -- first key is the mode
+    n = {
+      -- second key is the lefthand side of the map
+      -- mappings seen under group name "Buffer"
+      ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
+      ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
+      ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
+      ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
+      -- quick save
+      -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+    },
+    t = {
+      -- setting a mapping to false will disable it
+      -- ["<esc>"] = false,
+    },
+  },
   icons = {
     -- VimIcon = "\ue7c5",
     VimIcon = " ",
@@ -205,7 +276,12 @@ local config = {
             -- it's a left element, so use the left separator
             separator = "left",
             -- set the color of the surrounding based on the current mode using astronvim.status module
-            color = function() return { main = astronvim.status.hl.mode_bg(), right = "blank_bg" } end,
+            color = function()
+              return {
+                main = astronvim.status.hl.mode_bg(),
+                right = "blank_bg",
+              }
+            end,
           },
         },
         -- we want an empty space here so we can use the component builder to make a new section with just an empty string
@@ -213,7 +289,10 @@ local config = {
           { provider = "" },
           -- define the surrounding separator and colors to be used inside of the component
           -- and the color to the right of the separated out section
-          surround = { separator = "left", color = { main = "blank_bg", right = "file_info_bg" } },
+          surround = {
+            separator = "left",
+            color = { main = "blank_bg", right = "file_info_bg" },
+          },
         },
         -- add a section for the currently opened file information
         astronvim.status.component.file_info {
@@ -227,12 +306,18 @@ local config = {
         -- add a component for the current git branch if it exists and use no separator for the sections
         astronvim.status.component.git_branch { surround = { separator = "none" } },
         -- add a component for the current git diff if it exists and use no separator for the sections
-        astronvim.status.component.git_diff { padding = { left = 1 }, surround = { separator = "none" } },
+        astronvim.status.component.git_diff {
+          padding = { left = 1 },
+          surround = { separator = "none" },
+        },
         -- fill the rest of the statusline
         -- the elements after this will appear in the middle of the statusline
         astronvim.status.component.fill(),
         -- add a component to display if the LSP is loading, disable showing running client names, and use no separator
-        astronvim.status.component.lsp { lsp_client_names = false, surround = { separator = "none", color = "bg" } },
+        astronvim.status.component.lsp {
+          lsp_client_names = false,
+          surround = { separator = "none", color = "bg" },
+        },
         -- fill the rest of the statusline
         -- the elements after this will appear on the right of the statusline
         astronvim.status.component.fill(),
@@ -258,7 +343,10 @@ local config = {
           astronvim.status.component.file_info {
             -- we only want filename to be used and we can change the fname
             -- function to get the current working directory name
-            filename = { fname = function() return vim.fn.getcwd() end, padding = { left = 1 } },
+            filename = {
+              fname = function() return vim.fn.getcwd() end,
+              padding = { left = 1 },
+            },
             -- disable all other elements of the file_info component
             file_icon = false,
             file_modified = false,
@@ -279,7 +367,10 @@ local config = {
             hl = { fg = "bg" },
             -- use the right separator and define the background color
             -- as well as the color to the left of the separator
-            surround = { separator = "right", color = { main = "nav_icon_bg", left = "file_info_bg" } },
+            surround = {
+              separator = "right",
+              color = { main = "nav_icon_bg", left = "file_info_bg" },
+            },
           },
           -- add a navigation component and just display the percentage of progress in the file
           astronvim.status.component.nav {
@@ -304,11 +395,11 @@ local config = {
       return config
     end,
     init = {
-
       -- You can disable default plugins as follows:
       -- ["goolord/alpha-nvim"] = { disable = true },
 
       -- You can also add new plugins here as well:
+      -- Add plugins, the packer syntax without the "use"
       -- { "andweeb/presence.nvim" },
       -- {
       --   "ray-x/lsp_signature.nvim",
@@ -317,15 +408,27 @@ local config = {
       --     require("lsp_signature").setup()
       --   end,
       -- },
+
+      -- We also support a key value style plugin definition similar to NvChad:
+      -- ["ray-x/lsp_signature.nvim"] = {
+      --   event = "BufRead",
+      --   config = function()
+      --     require("lsp_signature").setup()
+      --   end,
+      -- },
     },
-    -- All other entries override the setup() call for default plugins
-    ["null-ls"] = function(config)
+    -- All other entries override the require("<key>").setup({...}) call for default plugins
+    ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
+      -- config variable is the default configuration table for the setup function call
       local null_ls = require "null-ls"
+
       -- Check supported formatters and linters
       -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
       -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
       config.sources = {
         -- Set a formatter
+        --latex
+        null_ls.builtins.formatting.latexindent,
         -- lua
         null_ls.builtins.formatting.stylua,
         --python
@@ -340,46 +443,22 @@ local config = {
         -- null_ls.builtins.diagnostics.pylint,
         -- C++
         null_ls.builtins.diagnostics.cppcheck,
-        -- CMake
-        -- null_ls.builtins.formatting.cmake_format,
-        -- null_ls.builtins.formatting.clang_format,
-        -- rust
-        -- null_ls.builtins.formatting.rustfmt,
-        -- null_ls.builtins.formatting.dprint,
+        -- Set a formatter
+        -- null_ls.builtins.formatting.stylua,
+        -- null_ls.builtins.formatting.prettier,
       }
-      -- set up null-ls's on_attach function
-      -- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-      -- config.on_attach = function(client, bufnr)
-      --   -- NOTE: You can remove this on attach function to disable format on save
-      --   if client.client_capabilities.document_formatting then
-      --     vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-      --     vim.api.nvim_create_autocmd("BufWritePre", {
-      --       desc = "Auto format before save",
-      --       -- pattern = "<buffer>",
-      --       group = augroup,
-      --       buffer = bufnr,
-      --       callback = function() vim.lsp.buf.formatting_sync(nil, 5000) end,
-      --       -- callback = vim.lsp.buf.formatting_sync(nil, 2000),
-      --     })
-      --   end
-      -- end
       return config -- return final config table
     end,
-    treesitter = {
+    treesitter = { -- overrides `require("treesitter").setup(...)`
       ensure_installed = { "lua" },
     },
     -- use mason-lspconfig to configure LSP installations
-    ["mason-lspconfig"] = {
-      -- ensure_installed = { "sumneko_lua", "clangd", "rust_analyzer" },
-      ensure_installed = { "clangd", "rust_analyzer" },
+    ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
+      ensure_installed = { "sumneko_lua" },
     },
-    -- use mason-tool-installer to configure DAP/Formatters/Linter installation
-    ["mason-tool-installer"] = {
-      ensure_installed = { "prettier" },
-      -- ensure_installed = { "prettier", "stylua" },
-    },
-    packer = {
-      compile_path = vim.fn.stdpath "data" .. "/packer_compiled.lua",
+    -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
+    ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
+      ensure_installed = { "prettier", "stylua" },
     },
   },
 
@@ -408,103 +487,10 @@ local config = {
     },
   },
 
-  -- Extend LSP configuration
-  lsp = {
-    formatting = {
-      timeout_ms = 3200,
-      disabled = {
-        -- "sumneko_lua"
-      },
-      -- filter = function(client)
-      --   if vim.bo.filetype == "javascript" then return client.name == "null-ls" end
-      --   --enable all other clients
-      --   return true
-      -- end,
-    },
-
-    skip_setup = { "clangd", "rust_analyzer", "cmake-language-server" },
-    -- enable servers that you already have installed without mason
-    servers = {
-      -- "clangd",
-      -- "pyright"
-    },
-    -- easily add or disable built in mappings added during LSP attaching
-    mappings = {
-      n = {
-        -- ["<leader>lf"] = false -- disable formatting keymap
-      },
-    },
-    -- add to the server on_attach function
-    -- on_attach = function(client, bufnr)
-    -- end,
-
-    -- override the lsp installer server-registration function
-    -- server_registration = function(server, opts)
-    --   require("lspconfig")[server].setup(opts)
-    -- end,
-
-    -- Add overrides for LSP server settings, the keys are the name of the server
-    ["server-settings"] = {
-      -- example for addings schemas to yamlls
-      -- yamlls = {
-      --   settings = {
-      --     yaml = {
-      --       schemas = {
-      --         ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
-      --         ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-      --         ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
-      --       },
-      --     },
-      --   },
-      -- },
-      sourcery = {
-        init_options = {
-          token = "user_dIGOG_nGdW97HxBFt5JzlXervkgAPuQqWm8_wJBBSpHEbiXhDywUnopZTvs",
-          -- extension = "vim.lsp",
-          -- editor_version = "nvim",
-        },
-      },
-      clangd = {
-        capabilities = {
-          offsetEncoding = "utf-8",
-        },
-      },
-    },
-  },
-
-  -- Diagnostics configuration (for vim.diagnostics.config({}))
-  diagnostics = {
-    virtual_text = true,
-    underline = true,
-  },
-
-  -- Mapping data with "desc" stored directly by vim.keymap.set().
-  --
-  -- Please use this mappings table to set keyboard mapping since this is the
-  -- lower level configuration and more robust one. (which-key will
-  -- automatically pick-up stored data by this setting.)
-  mappings = {
-    -- first key is the mode
-    n = {
-      -- second key is the lefthand side of the map
-      -- mappings seen under group name "Buffer"
-      ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
-      ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
-      ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
-      ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
-      -- quick save
-      -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
-    },
-    t = {
-      -- setting a mapping to false will disable it
-      -- ["<esc>"] = false,
-    },
-  },
-
   -- Modify which-key registration (Use this with mappings table in the above.)
   ["which-key"] = {
     -- Add bindings which show up as group name
-    register_mappings = {
+    register = {
       -- first key is the mode, n == normal mode
       n = {
         -- second key is the prefix, <leader> prefixes
@@ -517,32 +503,10 @@ local config = {
     },
   },
 
-  -- This function is run last
-  -- good place to configuring augroups/autocommands and custom filetypes
+  -- This function is run last and is a good place to configuring
+  -- augroups/autocommands and custom filetypes also this just pure lua so
+  -- anything that doesn't fit in the normal config locations above can go here
   polish = function()
-    -- make the dashboard show if its the last buffer is closed
-    local function alpha_on_bye(cmd)
-      local bufs = vim.fn.getbufinfo { buflisted = true }
-      vim.cmd(cmd)
-      if require("core.utils").is_available "alpha-nvim" and not bufs[2] then require("alpha").start(true) end
-    end
-
-    vim.keymap.del("n", "<leader>c")
-    if require("core.utils").is_available "bufdelete.nvim" then
-      vim.keymap.set("n", "<leader>c", function() alpha_on_bye "Bdelete!" end, { desc = "Close buffer" })
-    else
-      vim.keymap.set("n", "<leader>c", function() alpha_on_bye "bdelete!" end, { desc = "Close buffer" })
-    end
-    -- Set key binding
-    -- Set autocommands
-    vim.api.nvim_create_augroup("packer_conf", { clear = true })
-    vim.api.nvim_create_autocmd("BufWritePost", {
-      desc = "Sync packer after modifying plugins.lua",
-      group = "packer_conf",
-      pattern = "plugins.lua",
-      command = "source <afile> | PackerSync",
-    })
-
     -- Set up custom filetypes
     vim.filetype.add {
       extension = {

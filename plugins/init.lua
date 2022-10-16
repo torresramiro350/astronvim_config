@@ -101,6 +101,7 @@ return {
       }
     end,
   },
+  { "sainnhe/edge" },
   {
     "folke/tokyonight.nvim",
     config = function()
@@ -148,13 +149,14 @@ return {
     "navarasu/onedark.nvim",
     config = function()
       require("onedark").setup {
-        style = "cool",
+        -- style = "cool",
         -- style = "deep",
-        -- style = "darker",
+        -- style = "dark",
+        style = "darker",
         code_style = {
           comments = "none",
-          keywords = "italic",
-          functions = "italic",
+          keywords = "italic,bold",
+          functions = "italic,bold",
         },
       }
     end,
