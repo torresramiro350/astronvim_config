@@ -1,5 +1,23 @@
 -- keeping plugins here
 return {
+  { "tzachar/cmp-tabnine", run = "./install.sh", requires = "hrsh7th/nvim-cmp" },
+  {
+    "cshuaimin/ssr.nvim",
+    module = "ssr",
+    -- Calling setup is optional.
+    config = function()
+      require("ssr").setup {
+        min_width = 50,
+        min_height = 5,
+        keymaps = {
+          close = "q",
+          next_match = "n",
+          prev_match = "N",
+          replace_all = "<leader><cr>",
+        },
+      }
+    end,
+  },
   { "andweeb/presence.nvim" },
   {
     "ray-x/lsp_signature.nvim",
@@ -101,6 +119,8 @@ return {
       }
     end,
   },
+  --themes section
+  { "glepnir/zephyr-nvim" },
   { "sainnhe/edge" },
   {
     "folke/tokyonight.nvim",
@@ -188,7 +208,16 @@ return {
       }
     end,
   },
-  { "rebelot/kanagawa.nvim" },
+  {
+    "rebelot/kanagawa.nvim",
+    config = function()
+      require("kanagawa").setup {
+        commentStyle = { italic = false },
+        functionStyle = { italic = true, bold = true },
+        keywordStyle = { italic = true, bold = true },
+      }
+    end,
+  },
   { "lunarvim/horizon.nvim" },
   -- tokyodark color scheme
   { "tiagovla/tokyodark.nvim" },
@@ -198,7 +227,7 @@ return {
     as = "catppuccin",
     config = function() require("catppuccin").setup {} end,
   },
-  { "mfussenegger/nvim-dap" },
+  -- { "mfussenegger/nvim-dap" },
   {
     "Shatur/neovim-cmake",
     config = function()

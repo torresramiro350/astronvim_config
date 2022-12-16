@@ -460,12 +460,16 @@ local config = {
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
       ensure_installed = { "prettier", "stylua" },
     },
+    ["mason-nvim-dap"] = {},
   },
 
   -- LuaSnip Options
   luasnip = {
     -- Add paths for including more VS Code style snippets in luasnip
-    vscode_snippet_paths = {},
+    -- vscode_snippet_paths = {},
+    vscode = {
+      paths = {},
+    },
     -- Extend filetypes
     filetype_extend = {
       -- javascript = { "javascriptreact" },
