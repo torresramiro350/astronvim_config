@@ -1,284 +1,232 @@
--- keeping plugins here
 return {
-  { "tzachar/cmp-tabnine", run = "./install.sh", requires = "hrsh7th/nvim-cmp" },
+  { "easymotion/vim-easymotion", lazy = false },
   {
-    "cshuaimin/ssr.nvim",
-    module = "ssr",
-    -- Calling setup is optional.
-    config = function()
-      require("ssr").setup {
-        min_width = 50,
-        min_height = 5,
-        keymaps = {
-          close = "q",
-          next_match = "n",
-          prev_match = "N",
-          replace_all = "<leader><cr>",
-        },
+    "abecodes/tabout.nvim",
+    config = function() require("user.tabout").config() end,
+    lazy = false,
+  },
+  {
+    "f-person/git-blame.nvim",
+    event = "User AstroGitFile",
+    lazy = false,
+  },
+  { "catppuccin/nvim", name = "catppuccin" },
+  {
+    "goolord/alpha-nvim",
+    opts = function(_, opts)
+      -- opts.section.header.val = {
+      --   "                                                     ",
+      --   "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+      --   "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+      --   "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+      --   "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+      --   "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+      --   "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+      --   "                                                     ",
+      -- }
+      opts.section.header.val = {
+        "           ▄ ▄                   ",
+        "       ▄   ▄▄▄     ▄ ▄▄▄ ▄ ▄     ",
+        "       █ ▄ █▄█ ▄▄▄ █ █▄█ █ █     ",
+        "    ▄▄ █▄█▄▄▄█ █▄█▄█▄▄█▄▄█ █     ",
+        "  ▄ █▄▄█ ▄ ▄▄ ▄█ ▄▄▄▄▄▄▄▄▄▄▄▄▄▄  ",
+        "  █▄▄▄▄ ▄▄▄ █ ▄ ▄▄▄ ▄ ▄▄▄ ▄ ▄ █ ▄",
+        "▄ █ █▄█ █▄█ █ █ █▄█ █ █▄█ ▄▄▄ █ █",
+        "█▄█ ▄ █▄▄█▄▄█ █ ▄▄█ █ ▄ █ █▄█▄█ █",
+        "    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█ █▄█▄▄▄█    ",
       }
     end,
   },
-  { "andweeb/presence.nvim" },
   {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
+    "olimorris/onedarkpro.nvim",
+    priority = 1000, -- Ensure it loads first
   },
   {
-    "nvim-treesitter/nvim-treesitter-context",
-    config = function() require("treesitter-context").setup {} end,
+    "uloco/bluloco.nvim",
+    lazy = false,
+    priority = 1000,
+    dependencies = { "rktjmp/lush.nvim" },
+    config = function() end,
   },
-  { "simrat39/inlay-hints.nvim" },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "zbirenbaum/copilot.lua",
+    },
+    -- event = "InsertEnter",
+    opts = function(_, opts)
+      local cmp, copilot = require "cmp", require "copilot.suggestion"
+      local snip_status_ok, luasnip = pcall(require, "luasnip")
+      if not snip_status_ok then return end
+      local function has_words_before()
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+      end
+      if not opts.mapping then opts.mapping = {} end
+      opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
+        if copilot.is_visible() then
+          copilot.accept()
+        elseif cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
+      end, { "i", "s" })
+
+      opts.mapping["<C-x>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.next() end
+      end)
+
+      opts.mapping["<C-z>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.prev() end
+      end)
+
+      opts.mapping["<C-right>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.accept_word() end
+      end)
+
+      opts.mapping["<C-l>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.accept_word() end
+      end)
+
+      opts.mapping["<C-down>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.accept_line() end
+      end)
+
+      opts.mapping["<C-j>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.accept_line() end
+      end)
+
+      opts.mapping["<C-c>"] = cmp.mapping(function()
+        if copilot.is_visible() then copilot.dismiss() end
+      end)
+
+      return opts
+    end,
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "User AstroFile",
+    opts = { suggestion = { auto_trigger = true, debounce = 150 } },
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    lazy = false,
+    after = { "copilot.lua" },
+    config = function() require("copilot_cmp").setup {} end,
+  },
+  {
+    "abecodes/tabout.nvim",
+    lazy = false,
+    wants = { "nvim-treesitter" },
+    after = { "nvim-cmp" },
+    config = function()
+      require("tabout").setup {
+        tabkey = "<Tab>", -- key to trigger tabout, set to an empty string to disable
+        backwards_tabkey = "<S-Tab>", -- key to trigger backwards tabout, set to an empty string to disable
+        act_as_tab = true, -- shift content if tab out is not possible
+        act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+        default_tab = "<C-t>", -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
+        default_shift_tab = "<C-d>", -- reverse shift default action,
+        enable_backwards = true, -- well ...
+        completion = true, -- if the tabkey is used in a completion pum
+        tabouts = {
+          { open = ":", close = ":" },
+          { open = "'", close = "'" },
+          { open = '"', close = '"' },
+          { open = "`", close = "`" },
+          { open = "(", close = ")" },
+          { open = "[", close = "]" },
+          { open = "{", close = "}" },
+        },
+        ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
+        exclude = {}, -- tabout will ignore these filetypes
+      }
+    end,
+  },
+  { "luisiacc/gruvbox-baby" },
+  { "rebelot/kanagawa.nvim" },
+  -- github dark themes
+  { "projekt0n/github-nvim-theme", tag = "v0.0.7" },
   {
     "kylechui/nvim-surround",
+    lazy = false,
     config = function()
       require("nvim-surround").setup {
         -- Configuration here, or leave empty to use defaults
       }
     end,
   },
+  -- {
+  --   "tzachar/cmp-tabnine",
+  --   build = "./install.sh",
+  --   dependencies = "hrsh7th/nvim-cmp",
+  --   after = "nvim-cmp",
+  --   opts = function(_, opts)
+  --     -- local tabnine = require "cmp_tabnine.config"
+  --     -- tabnine:setup {
+  --     --   max_lines = 1000,
+  --     --   max_num_results = 20,
+  --     --   sotr = true,
+  --     --   run_on_every_keystroke = true,
+  --     --   snippet_placeholder = "..",
+  --     --   ignored_filetypes = {},
+  --     --   show_prediction_strength = false,
+  --     -- }
+  --     -- astronvim.add_cpm_source { name = "cmp_tabnine", priority = 1000, max_item_count = 7 }
+  --     local cmp = require "cmp"
+  --     opts.sources = cmp.config.sources {
+  --       { name = "nvim_lsp", priority = 1000 },
+  --       { name = "luasnip", priority = 750 },
+  --       { name = "cmp_tabnine", priority = 1000 },
+  --       { name = "buffer", priority = 750 },
+  --       { name = "path", priority = 500 },
+  --       -- { name = "emoji", priority = 700 },
+  --     }
+  --     return opts
+  --   end,
+  --   lazy = false,
+  -- },
+  -- {
+  --   "codota/tabnine-nvim",
+  --   build = "./dl_binaries.sh",
+  --   lazy = false,
+  --   -- branch = "beta",
+  --   config = function()
+  --     require("tabnine").setup {
+  --       disable_auto_comment = true,
+  --       accept_keymap = "<Tab>",
+  --       dismiss_keymap = "<C-]>",
+  --       debounce_ms = 800,
+  --       suggestion_color = { gui = "#98c379", cterm = 244 },
+  --       exclude_filetypes = { "TelescopePrompt" },
+  --     }
+  --   end,
+  -- },
   {
     "simrat39/rust-tools.nvim",
-    after = "mason-lspconfig.nvim",
-    config = function()
-      require("rust-tools").setup {
-        server = astronvim.lsp.server_settings "rust_analyzer",
-      }
-    end,
+    { "williamboman/mason-lspconfig.nvim" },
+    opts = {
+      ensure_installed = { "rust-analyzer" },
+    },
   },
   {
     "p00f/clangd_extensions.nvim",
-    after = "mason-lspconfig.nvim",
-    config = function()
-      require("clangd_extensions").setup {
-        server = astronvim.lsp.server_settings "clangd",
-        extensions = {
-          -- defaults:
-          -- Automatically set inlay hints (type hints)
-          autoSetHints = true,
-          -- These apply to the default ClangdSetInlayHints command
-          inlay_hints = {
-            -- Only show inlay hints for the current line
-            only_current_line = false,
-            -- Event which triggers a refersh of the inlay hints.
-            -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-            -- not that this may cause  higher CPU usage.
-            -- This option is only respected when only_current_line and
-            -- autoSetHints both are true.
-            only_current_line_autocmd = "CursorHold",
-            -- whether to show parameter hints with the inlay hints or not
-            show_parameter_hints = true,
-            -- prefix for parameter hints
-            parameter_hints_prefix = "<- ",
-            -- prefix for all the other hints (type, chaining)
-            other_hints_prefix = "=> ",
-            -- whether to align to the length of the longest line in the file
-            max_len_align = false,
-            -- padding from the left if max_len_align is true
-            max_len_align_padding = 1,
-            -- whether to align to the extreme right or not
-            right_align = false,
-            -- padding from the right if right_align is true
-            right_align_padding = 7,
-            -- The color of the hints
-            highlight = "Comment",
-            -- The highlight group priority for extmark
-            priority = 100,
-          },
-          ast = {
-            role_icons = {
-              type = "",
-              declaration = "",
-              expression = "",
-              specifier = "",
-              statement = "",
-              ["template argument"] = "",
-            },
-
-            kind_icons = {
-              Compound = "",
-              Recovery = "",
-              TranslationUnit = "",
-              PackExpansion = "",
-              TemplateTypeParm = "",
-              TemplateTemplateParm = "",
-              TemplateParamObject = "",
-            },
-
-            highlights = {
-              detail = "Comment",
-            },
-          },
-          memory_usage = {
-            border = "none",
-          },
-          symbol_info = {
-            border = "none",
-          },
-        },
-      }
-    end,
+    {
+      "williamboman/mason-lspconfig.nvim",
+      opts = {
+        ensure_installed = { "clangd" },
+      },
+    },
+    lazy = false,
   },
-  --themes section
-  { "glepnir/zephyr-nvim" },
-  { "sainnhe/edge" },
-  {
-    "folke/tokyonight.nvim",
-    config = function()
-      require("tokyonight").setup {
-        styles = {
-          comments = { italic = false },
-          keywords = { italic = true },
-          functions = { italic = true },
-        },
-      }
-    end,
-  },
-  --themer
-  {
-    "themercorp/themer.lua",
-    config = function()
-      require("themer").setup {
-        -- colorscheme = "rose_pine",
-        -- colorscheme = "kurai",
-        -- colorscheme = "papa_dark",
-        -- colorscheme = "ayu_mirage",
-        styles = {
-          ["function"] = { style = "italic" },
-          functionbuiltin = { style = "italic" },
-          -- variable = { style = "italic" },
-          variable = { style = "None" },
-          variableBuiltIn = { style = "italic" },
-          parameter = { style = "italic" },
-        },
-        plugins = {
-          treesitter = true,
-          indentline = true,
-          barbar = true,
-          bufferline = true,
-          cmp = true,
-          gitsigns = true,
-          lsp = true,
-          telescope = true,
-        },
-      }
-    end,
-  },
-  -- onedark
-  {
-    "navarasu/onedark.nvim",
-    config = function()
-      require("onedark").setup {
-        -- style = "cool",
-        -- style = "deep",
-        -- style = "dark",
-        style = "darker",
-        code_style = {
-          comments = "none",
-          keywords = "italic,bold",
-          functions = "italic,bold",
-        },
-      }
-    end,
-  },
-  --minimal
-  { "Yazeed1s/minimal.nvim" },
-  --sonokai
-  { "sainnhe/sonokai" },
-  --material
-  {
-    "marko-cerovac/material.nvim",
-    config = function()
-      require("material").setup {
-        italics = {
-          keywords = true,
-          comments = true,
-          functions = true,
-          variables = false,
-        },
-      }
-    end,
-  },
-  -- kanagawa bones colorscheme
-  {
-    "Shatur/neovim-ayu",
-    config = function()
-      require("ayu").setup {
-        mirage = true,
-      }
-    end,
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    config = function()
-      require("kanagawa").setup {
-        commentStyle = { italic = false },
-        functionStyle = { italic = true, bold = true },
-        keywordStyle = { italic = true, bold = true },
-      }
-    end,
-  },
-  { "lunarvim/horizon.nvim" },
-  -- tokyodark color scheme
-  { "tiagovla/tokyodark.nvim" },
-  -- catppuccin color scheme
-  {
-    "catppuccin/nvim",
-    as = "catppuccin",
-    config = function() require("catppuccin").setup {} end,
-  },
-  -- { "mfussenegger/nvim-dap" },
-  {
-    "Shatur/neovim-cmake",
-    config = function()
-      local opts = { noremap = true, silent = true }
-      local map = vim.api.nvim_set_keymap
-      map("n", "<leader><F6>", ":CMake configure<CR>", opts)
-      map("n", "<leader><F7>", ":CMake build_all<CR>", opts)
-      local Path = require "plenary.path"
-      local progress = ""
-      -- function cmake_build()
-      --   local job = require("cmake").build()
-      --   if job then
-      --     job:after(vim.schedule_wrap(function(_, exit_code)
-      --       if exit_code == 0 then
-      --         vim.notify("Target was built successfully", vim.log.levels.INFO, { title = "CMake" })
-      --       else
-      --         vim.notify("Target build failed", vim.log.levels.ERROR, { title = "CMake" })
-      --       end
-      --     end))
-      --   end
-      -- end
-
-      require("cmake").setup {
-        cmake_executable = "cmake",
-        save_before_build = true,
-        parameters_file = "neovim.json",
-        copy_compile_commands = true,
-        dap_configuration = {
-          type = "lldb",
-          request = "launch",
-          stopOnEntry = false,
-          runInTerminal = false,
-        },
-        dap_open_command = require("dap").repl.open,
-        build_dir = tostring(Path:new("{cwd}", "build", "{os}-{build_type}")),
-        default_projects_path = tostring(Path:new(vim.loop.os_homedir(), "Projects")),
-        configure_args = { "-GNinja", "-D", "CMAKE_EXPORT_COMPILE_COMMANDS=1" },
-        build_args = {},
-        on_build_output = nil,
-        -- on_build_output = function(lines)
-        --   local match = string.match(lines[#lines], "(%[.*%])")
-        --   if match then progress = string.gsub(match, "%%", "%%%%") end
-        -- end,
-        quickfix = {
-          pos = "botright", -- Where to open quickfix
-          height = 10, -- Height of the opened quickfix.
-          only_on_error = true, -- Open quickfix window only if target build failed.
-        },
-      }
-    end,
-  },
+  { "doums/darcula" },
+  { "briones-gabriel/darcula-solid.nvim", requires = "rktjmp/lush.nvim" },
   {
     "danymat/neogen",
     config = function()
@@ -286,7 +234,8 @@ return {
       local opts = { noremap = true, silent = true }
       local map = vim.api.nvim_set_keymap
       map("n", "<leader>nf", ":lua require('neogen').generate({type = 'func' })<CR>", opts)
-      map("n", "<leader>nc", ":lua require('neogen').generate({ type = 'class' })<CR>", opts)
+      map("n", "<leader>nf", ":lua require('neogen').generate({type = 'func' })<CR>", opts)
+      map("n", "<leader>nl", ":lua require('neogen').generate({ type = 'file' })<CR>", opts)
 
       require("neogen").setup {
         enabled = true,
@@ -322,4 +271,55 @@ return {
     end,
     requires = "nvim-treesitter/nvim-treesitter",
   },
+  -- {
+  --   "rebelot/heirline.nvim",
+  --   opts = function(_, opts)
+  --     local status = require "astronvim.utils.status"
+  --
+  --     opts.winbar = {
+  --       -- create custom winbar
+  --       -- store the current buffer number
+  --       init = function(self) self.bufnr = vim.api.nvim_get_current_buf() end,
+  --       fallthrough = false, -- pick the correct winbar based on condition
+  --       -- inactive winbar
+  --       {
+  --         condition = function() return not status.condition.is_active() end,
+  --         -- show the path to the file relative to the working directory
+  --         status.component.separated_path { path_func = status.provider.filename { modify = ":.:h" } },
+  --         -- add the file name and icon
+  --         status.component.file_info {
+  --           file_icon = { hl = status.hl.file_icon "winbar", padding = { left = 0 } },
+  --           file_modified = false,
+  --           file_read_only = false,
+  --           hl = status.hl.get_attributes("winbarnc", true),
+  --           surround = false,
+  --           update = "BufEnter",
+  --         },
+  --       },
+  --       -- active winbar
+  --       {
+  --         -- show the path to the file relative to the working directory
+  --         status.component.separated_path { path_func = status.provider.filename { modify = ":.:h" } },
+  --         -- add the file name and icon
+  --         status.component.file_info { -- add file_info to breadcrumbs
+  --           file_icon = { hl = status.hl.filetype_color, padding = { left = 0 } },
+  --           file_modified = false,
+  --           file_read_only = false,
+  --           hl = status.hl.get_attributes("winbar", true),
+  --           surround = false,
+  --           update = "BufEnter",
+  --         },
+  --         -- show the breadcrumbs
+  --         status.component.breadcrumbs {
+  --           icon = { hl = true },
+  --           hl = status.hl.get_attributes("winbar", true),
+  --           prefix = true,
+  --           padding = { left = 0 },
+  --         },
+  --       },
+  --     }
+  --
+  --     return opts
+  --   end,
+  -- },
 }
