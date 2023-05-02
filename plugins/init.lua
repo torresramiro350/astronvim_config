@@ -1,5 +1,53 @@
 return {
-  { "easymotion/vim-easymotion", lazy = false },
+  {
+    "folke/trouble.nvim",
+    requires = "nvim-tree/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end,
+    lazy = false,
+  },
+  {
+    "phaazon/hop.nvim",
+    branch = "v2", -- optional but strongly recommended
+    lazy = false,
+    config = function()
+      -- you can configure Hop the way you like here; see :h hop-config
+      require("hop").setup { keys = "etovxqpdygfblzhckisuran" }
+      local hop = require "hop"
+      local directions = require("hop.hint").HintDirection
+      vim.keymap.set(
+        "",
+        "f",
+        function() hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true } end,
+        { remap = true }
+      )
+      vim.keymap.set(
+        "",
+        "F",
+        function() hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true } end,
+        { remap = true }
+      )
+      vim.keymap.set(
+        "",
+        "t",
+        function() hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 } end,
+        { remap = true }
+      )
+      vim.keymap.set(
+        "",
+        "T",
+        function() hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 } end,
+        { remap = true }
+      )
+    end,
+  },
+  { "declancm/cinnamon.nvim", config = function() require("cinnamon").setup() end, lazy = false },
+  -- { "easymotion/vim-easymotion", lazy = false },
   {
     "abecodes/tabout.nvim",
     config = function() require("user.tabout").config() end,
@@ -56,6 +104,16 @@ return {
     -- event = "InsertEnter",
     opts = function(_, opts)
       local cmp, copilot = require "cmp", require "copilot.suggestion"
+      local lspkind = require "lspkind"
+      cmp.setup {
+        formatting = {
+          format = lspkind.cmp_format {
+            mode = "symbol",
+            max_width = 50,
+            symbol_map = { Copilot = "" },
+          },
+        },
+      }
       local snip_status_ok, luasnip = pcall(require, "luasnip")
       if not snip_status_ok then return end
       local function has_words_before()
@@ -271,55 +329,4 @@ return {
     end,
     requires = "nvim-treesitter/nvim-treesitter",
   },
-  -- {
-  --   "rebelot/heirline.nvim",
-  --   opts = function(_, opts)
-  --     local status = require "astronvim.utils.status"
-  --
-  --     opts.winbar = {
-  --       -- create custom winbar
-  --       -- store the current buffer number
-  --       init = function(self) self.bufnr = vim.api.nvim_get_current_buf() end,
-  --       fallthrough = false, -- pick the correct winbar based on condition
-  --       -- inactive winbar
-  --       {
-  --         condition = function() return not status.condition.is_active() end,
-  --         -- show the path to the file relative to the working directory
-  --         status.component.separated_path { path_func = status.provider.filename { modify = ":.:h" } },
-  --         -- add the file name and icon
-  --         status.component.file_info {
-  --           file_icon = { hl = status.hl.file_icon "winbar", padding = { left = 0 } },
-  --           file_modified = false,
-  --           file_read_only = false,
-  --           hl = status.hl.get_attributes("winbarnc", true),
-  --           surround = false,
-  --           update = "BufEnter",
-  --         },
-  --       },
-  --       -- active winbar
-  --       {
-  --         -- show the path to the file relative to the working directory
-  --         status.component.separated_path { path_func = status.provider.filename { modify = ":.:h" } },
-  --         -- add the file name and icon
-  --         status.component.file_info { -- add file_info to breadcrumbs
-  --           file_icon = { hl = status.hl.filetype_color, padding = { left = 0 } },
-  --           file_modified = false,
-  --           file_read_only = false,
-  --           hl = status.hl.get_attributes("winbar", true),
-  --           surround = false,
-  --           update = "BufEnter",
-  --         },
-  --         -- show the breadcrumbs
-  --         status.component.breadcrumbs {
-  --           icon = { hl = true },
-  --           hl = status.hl.get_attributes("winbar", true),
-  --           prefix = true,
-  --           padding = { left = 0 },
-  --         },
-  --       },
-  --     }
-  --
-  --     return opts
-  --   end,
-  -- },
 }
