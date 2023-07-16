@@ -24,8 +24,11 @@ local config = {
     -- },
   },
   -- Set colorscheme to use
-  -- colorscheme = "astrodark",
-  colorscheme = "catppuccin-macchiato",
+  colorscheme = "astrodark",
+  -- colorscheme = "github_dark_dimmed",
+  -- colorscheme = "kanagawa-lotus",
+  -- colorscheme = "catppuccin-macchiato",
+  -- colorscheme = "catppuccin-mocha",
   -- colorscheme = "darcula-solid",
 
   -- Add highlight groups in any theme
@@ -43,7 +46,7 @@ local config = {
       -- set to true or false etc.
       relativenumber = true, -- sets vim.opt.relativenumber
       number = true, -- sets vim.opt.number
-      spell = false, -- sets vim.opt.spell
+      spell = true, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
     },
@@ -57,10 +60,6 @@ local config = {
       icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
       ui_notifications_enabled = true, -- disable notifications when toggling UI elements
       heirline_bufferline = false, -- enable new heirline based bufferline (requires :PackerSync after changing)
-      --everforest config
-      everforest_background = "medium",
-      everforest_better_performance = 1,
-      everforest_enable_italic = 1,
     },
   },
   -- Set dashboard header
@@ -130,6 +129,7 @@ local config = {
     setup_handlers = {
       -- add a custom handler
       clangd = function(_, opts) require("clangd_extensions").setup { server = opts } end,
+      rust_analyzer = function(_, opts) require("rust-tools").setup { server = opts } end,
     },
     config = {
       clangd = {
@@ -137,10 +137,14 @@ local config = {
           offsetEncoding = "utf-8",
         },
       },
+      pylyzer = {
+        filetype = { "python" },
+      },
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      -- "pyright",
+      -- "pylyzer",
     },
     formatting = {
       -- control auto formatting on save
@@ -156,7 +160,7 @@ local config = {
       disabled = { -- disable formatting capabilities for the listed language servers
         -- "sumneko_lua",
       },
-      timeout_ms = 1000, -- default format timeout
+      timeout_ms = 1500, -- default format timeout
       -- filter = function(client) -- fully override the default formatting function
       --   return true
       -- end
@@ -169,11 +173,7 @@ local config = {
     },
     -- Add overrides for LSP server settings, the keys are the name of the server
     ["server-settings"] = {
-      -- clangd = {
-      -- capabilities = {
-      -- offsetEncoding = "utf-8",
-      -- },
-      -- },
+      --
     },
   },
   mappings = {
@@ -207,7 +207,9 @@ local config = {
         -- Set a formatter
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.isort,
         null_ls.builtins.diagnostics.pylint,
+        -- null_ls.builtins.diagnostics.ruff,
         null_ls.builtins.formatting.black,
       }
       return config -- return final config table
@@ -218,6 +220,7 @@ local config = {
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
       ensure_installed = { "sumneko_lua", "clangd", "pyright" },
+      -- ensure_installed = { "sumneko_lua", "clangd", "pylyzer" },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`

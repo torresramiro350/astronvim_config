@@ -1,52 +1,170 @@
 return {
+  --github theme
+  -- { "projekt0n/github-nvim-theme" },
+  -- nightfox theme
+  { "EdenEast/nightfox.nvim" },
   {
-    "folke/trouble.nvim",
-    requires = "nvim-tree/nvim-web-devicons",
+    "topaxi/gh-actions.nvim",
+    cmd = "GhActions",
+    keys = {
+      { "<leader>gh", "<cmd>GhActions<cr>", desc = "Open Github Actions" },
+    },
+    -- optional, you can also install and use `yq` instead.
+    build = "make",
+    dependencies = { "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim" },
+    opts = {},
+    config = function(_, opts) require("gh-actions").setup(opts) end,
+    event = "User AstroGitFile",
+  },
+  {
+    "folke/todo-comments.nvim",
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = { "BufReadPost", "BufNewFile" },
+    config = true,
+    -- stylua: ignore
+    keys = {
+      { "]t",         function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
+      { "[t",         function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
+      { "<leader>xt", "<cmd>TodoTrouble<cr>",                              desc = "Todo (Trouble)" },
+      { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",      desc = "Todo/Fix/Fixme (Trouble)" },
+      { "<leader>st", "<cmd>TodoTelescope<cr>",                            desc = "Todo" },
+      { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>",    desc = "Todo/Fix/Fixme" },
+    },
+  },
+  -- leap fast motion
+  {
+    "ggandor/flit.nvim",
+    keys = function()
+      ---@type LazyKeys[]
+      local ret = {}
+      for _, key in ipairs { "f", "F", "t", "T" } do
+        ret[#ret + 1] = { key, mode = { "n", "x", "o" }, desc = key }
+      end
+      return ret
+    end,
+    opts = { labeled_modes = "nx" },
+  },
+  -- leap neovim
+  {
+    "ggandor/leap.nvim",
+    keys = {
+      { "g", mode = { "n", "x", "o" }, desc = "Leap forward to" },
+      { "G", mode = { "n", "x", "o" }, desc = "Leap backward to" },
+      { "gg", mode = { "n", "x", "o" }, desc = "Leap from windows" },
+    },
+    config = function(_, opts)
+      local leap = require "leap"
+      for k, v in pairs(opts) do
+        leap.opts[k] = v
+      end
+      leap.add_default_mappings(true)
+      vim.keymap.del({ "x", "o" }, "x")
+      vim.keymap.del({ "x", "o" }, "X")
+    end,
+    event = { "BufReadPost", "BufNewFile" },
+  },
+  {
+    "chipsenkbeil/distant.nvim",
+    branch = "v0.2",
     config = function()
-      require("trouble").setup {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
+      require("distant").setup {
+        -- Applies Chip's personal settings to every machine you connect to
+        --
+        -- 1. Ensures that distant servers terminate with no connections
+        -- 2. Provides navigation bindings for remote directories
+        -- 3. Provides keybinding to jump into a remote file's parent directory
+        ["*"] = require("distant.settings").chip_default(),
       }
     end,
     lazy = false,
   },
+  -- git conflicts
   {
-    "phaazon/hop.nvim",
-    branch = "v2", -- optional but strongly recommended
-    lazy = false,
-    config = function()
-      -- you can configure Hop the way you like here; see :h hop-config
-      require("hop").setup { keys = "etovxqpdygfblzhckisuran" }
-      local hop = require "hop"
-      local directions = require("hop.hint").HintDirection
-      vim.keymap.set(
-        "",
-        "f",
-        function() hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true } end,
-        { remap = true }
-      )
-      vim.keymap.set(
-        "",
-        "F",
-        function() hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true } end,
-        { remap = true }
-      )
-      vim.keymap.set(
-        "",
-        "t",
-        function() hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 } end,
-        { remap = true }
-      )
-      vim.keymap.set(
-        "",
-        "T",
-        function() hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 } end,
-        { remap = true }
-      )
-    end,
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    config = true,
+    event = "User AstroFile",
   },
-  { "declancm/cinnamon.nvim", config = function() require("cinnamon").setup() end, lazy = false },
+  {
+    "rmagatti/goto-preview",
+    config = function()
+      require("goto-preview").setup {
+        default_mappings = true,
+        dismiss_on_move = true,
+      }
+    end,
+    -- lazy = false,
+    event = "User AstroFile",
+  },
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      {
+        "SmiteshP/nvim-navbuddy",
+        dependencies = {
+          "SmiteshP/nvim-navic",
+          "MunifTanjim/nui.nvim",
+        },
+        opts = { lsp = { auto_attach = true } },
+      },
+    },
+  },
+  {
+    "akinsho/toggleterm.nvim",
+    cmd = { "ToggleTerm", "TermExec" },
+    opts = {
+      size = 10,
+      shell = "zsh",
+      -- open_mapping = [[<F7>]],
+      open_mapping = [[<c-\>]],
+      shading_factor = 2,
+      direction = "float",
+      float_opts = {
+        border = "curved",
+        highlights = { border = "Normal", background = "Normal" },
+      },
+    },
+    lazy = false,
+  },
+  {
+    "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "Trouble" },
+    opts = { use_diagnostic_signs = true },
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
+      {
+        "[q",
+        function()
+          if require("trouble").is_open() then
+            require("trouble").previous { skip_groups = true, jump = true }
+          else
+            vim.cmd.cprev()
+          end
+        end,
+        desc = "Previous trouble/quickfix item",
+      },
+      {
+        "]q",
+        function()
+          if require("trouble").is_open() then
+            require("trouble").next { skip_groups = true, jump = true }
+          else
+            vim.cmd.cnext()
+          end
+        end,
+        desc = "Next trouble/quickfix item",
+      },
+    },
+  },
+  {
+    "declancm/cinnamon.nvim",
+    config = function() require("cinnamon").setup() end,
+    event = "User AstroFile",
+    -- lazy = false
+  },
   -- { "easymotion/vim-easymotion", lazy = false },
   {
     "abecodes/tabout.nvim",
@@ -56,7 +174,7 @@ return {
   {
     "f-person/git-blame.nvim",
     event = "User AstroGitFile",
-    lazy = false,
+    -- lazy = false,
   },
   { "catppuccin/nvim", name = "catppuccin" },
   {
@@ -84,17 +202,6 @@ return {
         "    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█ █▄█▄▄▄█    ",
       }
     end,
-  },
-  {
-    "olimorris/onedarkpro.nvim",
-    priority = 1000, -- Ensure it loads first
-  },
-  {
-    "uloco/bluloco.nvim",
-    lazy = false,
-    priority = 1000,
-    dependencies = { "rktjmp/lush.nvim" },
-    config = function() end,
   },
   {
     "hrsh7th/nvim-cmp",
@@ -210,15 +317,27 @@ return {
   { "luisiacc/gruvbox-baby" },
   { "rebelot/kanagawa.nvim" },
   -- github dark themes
-  { "projekt0n/github-nvim-theme", tag = "v0.0.7" },
+  {
+    "projekt0n/github-nvim-theme",
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require("github-theme").setup {
+        -- ...
+      }
+
+      -- vim.cmd "github_dark_tritanopia"
+      -- vim.cmd "colorscheme github_dark_tritanopia"
+    end,
+  },
   {
     "kylechui/nvim-surround",
-    lazy = false,
     config = function()
       require("nvim-surround").setup {
         -- Configuration here, or leave empty to use defaults
       }
     end,
+    event = "VeryLazy",
   },
   -- {
   --   "tzachar/cmp-tabnine",
