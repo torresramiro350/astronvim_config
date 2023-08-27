@@ -6,6 +6,13 @@ return {
     ["<leader>xl"] = { "<cmd>TroubleToggle loclist<cr>", desc = "document list" },
     ["<leader>xq"] = { "<cmd>TroubleToggle quickfix<cr>" },
     ["gR"] = { "<cmd>TroubleToggle lsp_references<cr>" },
+    -- ["<:>"] = { "<cmd>FineCmdline<CR>", dest = "command line" },
+    -- ["<CR>"] = { "<cmd>FineCmdline<CR>", { noremap = true } },
+    -- ["gp"] = {
+    --   "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+    --   desc = "go to preview",
+    --   --{ noremap = true },
+    -- },
   },
   t = {},
 }

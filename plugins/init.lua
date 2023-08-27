@@ -279,12 +279,12 @@ return {
     event = "User AstroFile",
     opts = { suggestion = { auto_trigger = true, debounce = 150 } },
   },
-  {
-    "zbirenbaum/copilot-cmp",
-    lazy = false,
-    after = { "copilot.lua" },
-    config = function() require("copilot_cmp").setup {} end,
-  },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   lazy = false,
+  --   after = { "copilot.lua" },
+  --   config = function() require("copilot_cmp").setup {} end,
+  -- },
   {
     "abecodes/tabout.nvim",
     lazy = false,
@@ -385,23 +385,24 @@ return {
   --     }
   --   end,
   -- },
-  {
-    "simrat39/rust-tools.nvim",
-    { "williamboman/mason-lspconfig.nvim" },
-    opts = {
-      ensure_installed = { "rust-analyzer" },
-    },
-  },
-  {
-    "p00f/clangd_extensions.nvim",
-    {
-      "williamboman/mason-lspconfig.nvim",
-      opts = {
-        ensure_installed = { "clangd" },
-      },
-    },
-    lazy = false,
-  },
+  -- {
+  --   "simrat39/rust-tools.nvim",
+  --   { "williamboman/mason-lspconfig.nvim" },
+  --   opts = {
+  --     ensure_installed = { "rust-analyzer" },
+  --   },
+  -- },
+  -- {
+  --   "p00f/clangd_extensions.nvim",
+  --   {
+  --     "williamboman/mason-lspconfig.nvim",
+  --     opts = {
+  --       ensure_installed = { "clangd" },
+  --     },
+  --   },
+  --   -- event = "User AstroFile",
+  --   -- lazy = false,
+  -- },
   { "doums/darcula" },
   { "briones-gabriel/darcula-solid.nvim", requires = "rktjmp/lush.nvim" },
   {

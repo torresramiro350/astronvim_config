@@ -29,7 +29,7 @@ local config = {
   -- colorscheme = "kanagawa-lotus",
   -- colorscheme = "catppuccin-macchiato",
   -- colorscheme = "catppuccin-mocha",
-  -- colorscheme = "darcula-solid",
+  -- colorscheme = "darcula",
 
   -- Add highlight groups in any theme
   highlights = {
@@ -126,25 +126,20 @@ local config = {
   },
   -- Extend LSP configuration
   lsp = {
-    setup_handlers = {
-      -- add a custom handler
-      clangd = function(_, opts) require("clangd_extensions").setup { server = opts } end,
-      rust_analyzer = function(_, opts) require("rust-tools").setup { server = opts } end,
-    },
     config = {
       clangd = {
         capabilities = {
           offsetEncoding = "utf-8",
         },
       },
-      pylyzer = {
-        filetype = { "python" },
-      },
+      --   -- pylyzer = {
+      --   --   filetype = { "python" },
+      --   -- },
     },
     -- enable servers that you already have installed without mason
     servers = {
       -- "pyright",
-      -- "pylyzer",
+      -- "clangd",
     },
     formatting = {
       -- control auto formatting on save
@@ -219,7 +214,7 @@ local config = {
     },
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      ensure_installed = { "sumneko_lua", "clangd", "pyright" },
+      ensure_installed = { "sumneko_lua" },
       -- ensure_installed = { "sumneko_lua", "clangd", "pylyzer" },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
